@@ -6,7 +6,7 @@
 /*   By: jsaintho <jsaintho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 11:37:56 by jsaintho          #+#    #+#             */
-/*   Updated: 2024/05/24 16:31:19 by jsaintho         ###   ########.fr       */
+/*   Updated: 2024/05/24 18:13:20 by jsaintho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,15 @@
 # define WIDTH 800
 # define HEIGHT 600
 
+
+
+
 typedef struct s_wireframe
 {
 	int		width;
 	int		height;
-
+	int		x_tile;
+	int		y_tile;
 }	t_wireframe;
 
 
@@ -48,9 +52,10 @@ typedef struct s_mlx
 	t_wireframe	*t_f;
 }	t_mlx;
 
-// Events
+// Events && Utils
 void	key_close(int n, t_mlx *t);
 void	clean_exit(t_mlx *t);
+int		map_size(char *map_line);
 
 // Initialization
 void	clean_init(t_mlx *t);
@@ -60,6 +65,7 @@ int		read_fdf(t_mlx *f, char	*file_name);
 
 // Draw
 void	set_pixel_color(t_mlx *t, int x, int y, int n);
+void    bresenham_segment(int x1, int y1, int x2, int y2);
 
 // get next line
 char	*get_next_line(int fd);

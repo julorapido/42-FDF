@@ -6,7 +6,7 @@
 /*   By: jsaintho <jsaintho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 15:03:43 by jsaintho          #+#    #+#             */
-/*   Updated: 2024/05/24 16:37:43 by jsaintho         ###   ########.fr       */
+/*   Updated: 2024/05/24 18:12:14 by jsaintho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int main(int argc, char **argv)
 	init(f);
 	render(f);
 	printf("%d by %d MAP \n", f->t_f->width, f->t_f->height);
+	bresenham_segment(10, 10, 500, 500);
 	mlx_hook(f->win, 2, 1L << 0, k_hook, f);
 	//mlx_hook(f->win, 4, 1L << 2, hook_mousedown, f);
 	mlx_put_image_to_window(f->mlx, f->win, f->img, 0, 0);

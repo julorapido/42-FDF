@@ -6,7 +6,7 @@
 /*   By: jsaintho <jsaintho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 15:37:15 by jsaintho          #+#    #+#             */
-/*   Updated: 2024/05/24 15:52:52 by jsaintho         ###   ########.fr       */
+/*   Updated: 2024/05/24 18:14:23 by jsaintho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,27 @@ int	k_hook(int k_code, t_mlx *f)
 		render(f);
 	}
 	return 0;
+}
+// ===============================
+// 		   MAP CALCULATOR
+// ===============================
+int	map_size(t_mlx *f, char *map_line)
+{
+	int	i;
+	int c;
+	int	l;
+
+	i = 0;
+	l = 0;
+	while (map_line[i] != '\0')
+	{
+		c = 1;
+		while(ft_isdigit(map_line[i + (c - 1)]))
+			c++;
+		if (c > 1)
+			l++;
+		i+= c;
+	}
+	//
+	return (l);
 }

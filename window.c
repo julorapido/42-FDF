@@ -6,7 +6,7 @@
 /*   By: jsaintho <jsaintho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 11:39:15 by jsaintho          #+#    #+#             */
-/*   Updated: 2024/05/24 17:32:22 by jsaintho         ###   ########.fr       */
+/*   Updated: 2024/05/28 15:05:56 by jsaintho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,15 +78,18 @@ int	read_fdf(t_mlx *f, char *file_name)
 		return 0;
 	}
 	line_ = get_next_line(fd);
+	f->line_length = ft_strlen(line_);
 	y = 1;
-	f->t_f->width = map_size(f, line_);
+	map_size(f, line_);
 	while (line_)
 	{
 		printf("%s \n", line_);
 		line_  = get_next_line(fd);
 		y++;
 	}
+	f->t_f->y_tile = ((int)HEIGHT / y - 1);
 	f->t_f->height = y--;
+	set_wireframe_points(f, file_name);
 	close(fd);
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: jsaintho <jsaintho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 11:37:56 by jsaintho          #+#    #+#             */
-/*   Updated: 2024/05/24 18:13:20 by jsaintho         ###   ########.fr       */
+/*   Updated: 2024/05/28 16:14:34 by jsaintho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,23 @@
 # define WIDTH 800
 # define HEIGHT 600
 
+# define ABS(X) X < 0 ? -X : X
+# define SIGN(A) A < 0 ? -1 : 1
 
+# define ROTATE_Z_X(x, y, a)({			\
+	int x2;								\
+	x2 = x * cos(a) - y * sin(a);	 	\
+	x2;})								\
 
+# define ROTATE_Z_Y(x, y, a)({			\
+	int y2;								\
+	y2 = x * sin(a) + y * cos(a); 		\
+	y2;})								\
+
+# define ROTATE_X_Y(y, z, a)({			\
+	int y2;								\
+	y2 = y * cos(a) + z * sin(a);		\
+	y2;})								\
 
 typedef struct s_wireframe
 {
@@ -37,6 +52,8 @@ typedef struct s_wireframe
 	int		height;
 	int		x_tile;
 	int		y_tile;
+	int		*points;
+	char	*file_content;
 }	t_wireframe;
 
 
@@ -49,13 +66,15 @@ typedef struct s_mlx
 	int			bits_per_pixel;
 	int			line_length;
 	int			endian;
+	char		*file_content;
 	t_wireframe	*t_f;
 }	t_mlx;
 
 // Events && Utils
 void	key_close(int n, t_mlx *t);
 void	clean_exit(t_mlx *t);
-int		map_size(char *map_line);
+int		map_size(t_mlx *t, char *map_line);
+void	set_wireframe_points(t_mlx *f, char *filename);
 
 // Initialization
 void	clean_init(t_mlx *t);
@@ -65,7 +84,9 @@ int		read_fdf(t_mlx *f, char	*file_name);
 
 // Draw
 void	set_pixel_color(t_mlx *t, int x, int y, int n);
-void    bresenham_segment(int x1, int y1, int x2, int y2);
+void	render_tiles(t_mlx *t);
+void	bresLINE(t_mlx *f, int x1, int y1, int x2, int y2);
+
 
 // get next line
 char	*get_next_line(int fd);

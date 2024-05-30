@@ -6,7 +6,7 @@
 /*   By: jsaintho <jsaintho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 11:39:15 by jsaintho          #+#    #+#             */
-/*   Updated: 2024/05/28 15:05:56 by jsaintho         ###   ########.fr       */
+/*   Updated: 2024/05/30 16:43:38 by jsaintho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,16 @@ char	*get_next_line(int fd);
 //		- GG >> 8   (0x0000FF00)
 //		- RR >> 16  (0x00FF0000)
 //		- AA >> 24  (0xAA000000)
-void	set_pixel_color(t_mlx *f, int x, int y, int n)
+void	set_pixel_color(t_mlx *f, int x, int y, int z)
 {
 		char	*dst;
 		int		offset;
 		int		color;
 
-		n++;
 		if (x < 0 || y < 0 || y > HEIGHT || x > WIDTH)
 			return ;
-		color = 0x00FFFFFFF;
-		
+		color = 0x40404040;
+		color += z;	
 		offset = (y * f->line_length + x * (f->bits_per_pixel / 8));
 		dst = f->buf + (offset);
 		*(unsigned int*)dst = color;
@@ -87,7 +86,7 @@ int	read_fdf(t_mlx *f, char *file_name)
 		line_  = get_next_line(fd);
 		y++;
 	}
-	f->t_f->y_tile = ((int)HEIGHT / y - 1);
+	f->t_f->y_tile = ((int)F_HEIGHT / y - 1);
 	f->t_f->height = y--;
 	set_wireframe_points(f, file_name);
 	close(fd);

@@ -6,7 +6,7 @@
 /*   By: jsaintho <jsaintho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 11:37:56 by jsaintho          #+#    #+#             */
-/*   Updated: 2024/05/28 16:14:34 by jsaintho         ###   ########.fr       */
+/*   Updated: 2024/05/30 16:34:41 by jsaintho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,16 @@
 # include <sys/uio.h>
 # include <unistd.h>
 
-# define WIDTH 800
-# define HEIGHT 600
+# define WIDTH 1440
+# define HEIGHT 1080
+
+# define F_WIDTH 800
+# define F_HEIGHT 600
+#define M_PI       3.14159265358979323846
 
 # define ABS(X) X < 0 ? -X : X
 # define SIGN(A) A < 0 ? -1 : 1
+# define degToRad(a) (a * M_PI / 180.0)
 
 # define ROTATE_Z_X(x, y, a)({			\
 	int x2;								\
@@ -46,6 +51,12 @@
 	y2 = y * cos(a) + z * sin(a);		\
 	y2;})								\
 
+typedef struct s_point
+{
+	int x;
+	int y;
+}				t_point;
+
 typedef struct s_wireframe
 {
 	int		width;
@@ -53,6 +64,7 @@ typedef struct s_wireframe
 	int		x_tile;
 	int		y_tile;
 	int		*points;
+	t_point	*r_p;
 	char	*file_content;
 }	t_wireframe;
 
@@ -85,7 +97,8 @@ int		read_fdf(t_mlx *f, char	*file_name);
 // Draw
 void	set_pixel_color(t_mlx *t, int x, int y, int n);
 void	render_tiles(t_mlx *t);
-void	bresLINE(t_mlx *f, int x1, int y1, int x2, int y2);
+void	render_iso(t_mlx *t);
+void	bresLINE(t_mlx *f, int x1, int y1, int x2, int y2, int z);
 
 
 // get next line

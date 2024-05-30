@@ -6,7 +6,7 @@
 /*   By: jsaintho <jsaintho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 15:16:12 by jsaintho          #+#    #+#             */
-/*   Updated: 2024/05/30 16:43:12 by jsaintho         ###   ########.fr       */
+/*   Updated: 2024/05/30 16:32:40 by jsaintho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,19 @@
 
 //# define arr(x) f->t_f->r_p[x]
 
-void bresLINE(t_mlx *f, int x0, int y0, int x1, int y1, int z)
+void bresLINE(t_mlx *f, int x0, int y0, int x1, int y1)
 {
   int dx =  abs (x1 - x0), sx = x0 < x1 ? 1 : -1;
   int dy = -abs (y1 - y0), sy = y0 < y1 ? 1 : -1; 
   int err = dx + dy, e2; /* error value e_xy */
  
-  int p = 0, p_step = (y1 - y0);
   for (;;){  /* loop */
-    set_pixel_color(f, x0, y0, p);
+    set_pixel_color(f, x0, y0, 0);
     if (x0 == x1 && y0 == y1)
 		break;
     e2 = 2 * err;
     if (e2 >= dy) { err += dy; x0 += sx; } /* e_xy+e_x > 0 */
-    if (e2 <= dx) { err += dx; y0 += sy; p += z * p_step;} /* e_xy+e_y < 0 */
+    if (e2 <= dx) { err += dx; y0 += sy; } /* e_xy+e_y < 0 */
   }
 }
 
@@ -73,7 +72,7 @@ t_point	ft_rotate_z(int x, int y, double z_angle)
 }
 
 
-/*
+
 void    render_tiles(t_mlx *f)
 {
     int x;
@@ -94,11 +93,11 @@ void    render_tiles(t_mlx *f)
 			x++;
             x_p += f->t_f->x_tile;
         }
-		bresLINE(f, x_p, y_p, x_p, y_p + f->t_f->y_tile);
+		/*bresLINE(f, x_p, y_p, x_p, y_p + f->t_f->y_tile);
         y_p += f->t_f->y_tile;
-        y++;(y + x * f->t_f->width) + x
+        y++;(y + x * f->t_f->width) + x*/
     }
-}*/
+}
 
 
 void	render_iso(t_mlx *f)
@@ -128,7 +127,7 @@ void	render_iso(t_mlx *f)
 			a.x = p.x; 
 			a.y = p.y;
 
-			t_point q = ft_rotate_x(a.y, z * -20, (atan(sqrt(2))));
+			t_point q = ft_rotate_x(a.y, z * -10, (atan(sqrt(2))));
 			a.y = q.y;
 
 			//printf(" ==> (%d:%d) \n", a.x, a.y);
@@ -149,7 +148,6 @@ void	render_iso(t_mlx *f)
 			t_point x2 = f->t_f->r_p[(y * f->t_f->width) + (x + 1)];	
 			t_point c = f->t_f->r_p[(((y + 1) * f->t_f->width) + x)];
 
-			int z = f->t_f->points[(y * f->t_f->width) + x];
 			//printf(" (%d:%d)  (%d:%d) \n",  x1.x, x1.y, x2.x, x2.y);
 			//printf("(%d:%d  (%d:%d) \n",  a.x, a.y, a.x, c.y);
 			printf(" [x%d:x%d] | [y%d:y%d]\n", 
@@ -157,8 +155,8 @@ void	render_iso(t_mlx *f)
 					(y * f->t_f->width) + x, (((y + 1) * f->t_f->width) + x)
 				);
 			if(y < f->t_f->height - 1)
-				bresLINE(f, x1.x + F_WIDTH / 2, x1.y, c.x + F_WIDTH / 2, c.y,z);
-			bresLINE(f, x1.x + F_WIDTH / 2, x1.y, x2.x + F_WIDTH / 2, x2.y, z);
+				bresLINE(f, x1.x + F_WIDTH / 2, x1.y, c.x + F_WIDTH / 2, c.y);
+			bresLINE(f, x1.x + F_WIDTH / 2, x1.y, x2.x + F_WIDTH / 2, x2.y);
 		}
 		printf("================================ \n");
 	}

@@ -6,7 +6,7 @@
 /*   By: jsaintho <jsaintho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 15:37:15 by jsaintho          #+#    #+#             */
-/*   Updated: 2024/05/28 16:04:11 by jsaintho         ###   ########.fr       */
+/*   Updated: 2024/05/29 12:50:35 by jsaintho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	map_size(t_mlx *f, char *map_line)
 		i+= c;
 	}
 	f->t_f->width = l;
-	f->t_f->x_tile = (int) ((int)WIDTH / l);
+	f->t_f->x_tile = (int) ((int)F_WIDTH / l);
 	return (l);
 }
 

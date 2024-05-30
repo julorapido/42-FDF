@@ -6,7 +6,7 @@
 /*   By: jsaintho <jsaintho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 15:03:43 by jsaintho          #+#    #+#             */
-/*   Updated: 2024/05/28 15:52:58 by jsaintho         ###   ########.fr       */
+/*   Updated: 2024/05/30 11:42:57 by jsaintho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ int main(int argc, char **argv)
 	}
 	init(f);
 	printf("%d by %d MAP \n", f->t_f->width, f->t_f->height);
-	render_tiles(f);
+	//render_tiles(f);
+	render_iso(f);
 	render(f);
 	mlx_hook(f->win, 2, 1L << 0, k_hook, f);
 	//mlx_hook(f->win, 4, 1L << 2, hook_mousedown, f);

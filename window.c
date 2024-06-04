@@ -6,7 +6,7 @@
 /*   By: jsaintho <jsaintho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 11:39:15 by jsaintho          #+#    #+#             */
-/*   Updated: 2024/05/30 16:43:38 by jsaintho         ###   ########.fr       */
+/*   Updated: 2024/06/04 15:21:28 by jsaintho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,12 @@ void	set_pixel_color(t_mlx *f, int x, int y, int z)
 {
 		char	*dst;
 		int		offset;
-		int		color;
 
 		if (x < 0 || y < 0 || y > HEIGHT || x > WIDTH)
 			return ;
-		color = 0x40404040;
-		color += z;	
 		offset = (y * f->line_length + x * (f->bits_per_pixel / 8));
 		dst = f->buf + (offset);
-		*(unsigned int*)dst = color;
+		*(unsigned int*)dst = z;
 }
 
 //  =====================================================

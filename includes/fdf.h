@@ -6,7 +6,7 @@
 /*   By: jsaintho <jsaintho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 11:37:56 by jsaintho          #+#    #+#             */
-/*   Updated: 2024/05/30 16:34:41 by jsaintho         ###   ########.fr       */
+/*   Updated: 2024/06/04 16:52:28 by jsaintho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 # include <sys/uio.h>
 # include <unistd.h>
 
-# define WIDTH 1440
+# define WIDTH 1920
 # define HEIGHT 1080
 
 # define F_WIDTH 800
@@ -96,7 +96,7 @@ int		read_fdf(t_mlx *f, char	*file_name);
 
 // Draw
 void	set_pixel_color(t_mlx *t, int x, int y, int n);
-void	render_tiles(t_mlx *t);
+void	render_fdf(t_mlx *t);
 void	render_iso(t_mlx *t);
 void	bresLINE(t_mlx *f, int x1, int y1, int x2, int y2, int z);
 

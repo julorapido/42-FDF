@@ -1,6 +1,6 @@
 NAME = fdf
 GET_NEXT_LINE = get_next_line.c get_next_line_utils.c
-SRCS_ = fdf.c utils.c window.c draw.c $(GET_NEXT_LINE)
+SRCS_ = fdf.c utils.c window.c draw.c math.c $(GET_NEXT_LINE)
 SRCS_OBJ = $(SRCS:.c=.o)
 
 CFLAGS = -Wall -Wextra

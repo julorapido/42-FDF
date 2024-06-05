@@ -6,13 +6,12 @@
 /*   By: jsaintho <jsaintho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 11:39:15 by jsaintho          #+#    #+#             */
-/*   Updated: 2024/06/04 15:21:28 by jsaintho         ###   ########.fr       */
+/*   Updated: 2024/06/05 17:31:48 by jsaintho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <fdf.h>
+#include "fdf.h"
 
-char	*get_next_line(int fd);
 //  ======================================================================
 //                            SET PIXEL COLOR                            
 //  ======================================================================
@@ -26,14 +25,14 @@ char	*get_next_line(int fd);
 //		- AA >> 24  (0xAA000000)
 void	set_pixel_color(t_mlx *f, int x, int y, int z)
 {
-		char	*dst;
-		int		offset;
+	char	*dst;
+	int		offset;
 
-		if (x < 0 || y < 0 || y > HEIGHT || x > WIDTH)
-			return ;
-		offset = (y * f->line_length + x * (f->bits_per_pixel / 8));
-		dst = f->buf + (offset);
-		*(unsigned int*)dst = z;
+	if (x < 0 || y < 0 || y > HEIGHT || x > WIDTH)
+		return ;
+	offset = (y * f->line_length + x * (f->bits_per_pixel / 8));
+	dst = f->buf + (offset);
+	*(unsigned int *)dst = z;
 }
 
 //  =====================================================
@@ -47,17 +46,18 @@ void	init(t_mlx *f)
 	f->win = mlx_new_window(f->mlx, WIDTH, HEIGHT, "Wireframe");
 	if (!f->win)
 		clean_exit(f);
-
 	f->img = mlx_new_image(f->mlx, WIDTH, HEIGHT);
 	if (!(f->img))
 		clean_exit(f);
-
-	f->buf = mlx_get_data_addr(f->img, &f->bits_per_pixel, 
+	f->t_f->top_color = 0x0000FFFF;
+	f->t_f->base_color = 0x000000AA;
+	f->buf = mlx_get_data_addr(f->img, &f->bits_per_pixel,
 			&f->line_length, &f->endian);
 }
 //  =====================================================
 //   					  READ FILE 
 //  =====================================================
+
 int	read_fdf(t_mlx *f, char *file_name)
 {
 	int		fd;
@@ -66,21 +66,20 @@ int	read_fdf(t_mlx *f, char *file_name)
 
 	if (!file_name)
 		return (0);
-	
 	fd = open(ft_strjoin("maps/", file_name), O_RDONLY);
 	if (fd == -1 || !file_name)
 	{
 		write(2, "Cannot read file.\n", 18);
-		return 0;
+		return (0);
 	}
 	line_ = get_next_line(fd);
 	f->line_length = ft_strlen(line_);
-	y = 1;
 	map_size(f, line_);
+	y = 1;
 	while (line_)
 	{
 		printf("%s \n", line_);
-		line_  = get_next_line(fd);
+		line_ = get_next_line(fd);
 		y++;
 	}
 	f->t_f->y_tile = ((int)F_HEIGHT / y - 1);
@@ -90,13 +89,23 @@ int	read_fdf(t_mlx *f, char *file_name)
 	return (1);
 }
 
-
 //  =====================================================
 //   					  RENDER 
 //  =====================================================
 int	render(t_mlx *f)
 {
-	// SSSS
+	int	x;
+	int	y;
+
+	y = -1;
+	while (y++ < HEIGHT)
+	{
+		x = -1;
+		while (x++ < WIDTH)
+			set_pixel_color(f, x, y, 0);
+	}
+	render_fdf(f);
 	mlx_put_image_to_window(f->mlx, f->win, f->img, 0, 0);
-	return 1;
+	return (1);
 }
+

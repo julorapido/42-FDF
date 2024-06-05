@@ -6,7 +6,7 @@
 /*   By: jsaintho <jsaintho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 11:37:56 by jsaintho          #+#    #+#             */
-/*   Updated: 2024/06/04 16:52:28 by jsaintho         ###   ########.fr       */
+/*   Updated: 2024/06/05 16:39:42 by jsaintho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,18 @@
 
 # define WIDTH 1920
 # define HEIGHT 1080
-
+# define W3 WIDTH/3
 # define F_WIDTH 800
 # define F_HEIGHT 600
-#define M_PI       3.14159265358979323846
+# define M_PI 3.14159265358979323846
 
-# define ABS(X) X < 0 ? -X : X
-# define SIGN(A) A < 0 ? -1 : 1
+//# define ABS(X) X < 0 ? -X : X
+//# define SIGN(A) A < 0 ? -1 : 1
+#define SNS(a,b) a < b ? (1) : (-1)
+# define X_A f->t_f->x_anchor
+# define Y_A f->t_f->y_anchor
 # define degToRad(a) (a * M_PI / 180.0)
-
+/*
 # define ROTATE_Z_X(x, y, a)({			\
 	int x2;								\
 	x2 = x * cos(a) - y * sin(a);	 	\
@@ -51,6 +54,14 @@
 	y2 = y * cos(a) + z * sin(a);		\
 	y2;})								\
 
+# define NORM_FIX(a, b)({								\
+	int c;												\
+	c = (f->t_f->points[a] - f->t_f->points[b] == 0) ? 	\
+		(f->t_f->points[a] != 0 ? -1 : 0) : (2);		\
+	c;})												\
+
+# define NORM_MACRO(a, b) a == 0 ? (0x00000099) : (a == -1 ? 0x0000FFFf : (255 + b))
+*/
 typedef struct s_point
 {
 	int x;
@@ -66,6 +77,14 @@ typedef struct s_wireframe
 	int		*points;
 	t_point	*r_p;
 	char	*file_content;
+	int		base_color;
+	int		top_color;
+	int		sx;
+	int		sy;
+	int		dx;
+	int		dy;
+	int		x_anchor;
+	int		y_anchor;
 }	t_wireframe;
 
 
@@ -82,11 +101,23 @@ typedef struct s_mlx
 	t_wireframe	*t_f;
 }	t_mlx;
 
+
+// math
+t_point ft_rotate_y(int x, int z, double y_angle);
+t_point	ft_rotate_z(int x, int y, double z_angle);
+t_point	ft_rotate_x(int y, int z, double x_angle);
+int		norm_fix(t_mlx *t, int a, int b);
+int		norm_fix_t(t_mlx *f, int a, int b);
+
 // Events && Utils
-void	key_close(int n, t_mlx *t);
 void	clean_exit(t_mlx *t);
 int		map_size(t_mlx *t, char *map_line);
 void	set_wireframe_points(t_mlx *f, char *filename);
+
+// Events
+void	rotate_fdf(t_mlx *f, int a);
+void	key_close(int n, t_mlx *t);
+
 
 // Initialization
 void	clean_init(t_mlx *t);
@@ -97,14 +128,12 @@ int		read_fdf(t_mlx *f, char	*file_name);
 // Draw
 void	set_pixel_color(t_mlx *t, int x, int y, int n);
 void	render_fdf(t_mlx *t);
-void	render_iso(t_mlx *t);
-void	bresLINE(t_mlx *f, int x1, int y1, int x2, int y2, int z);
+void	init_iso(t_mlx *t);
+void	bresline(t_mlx *f, int x1, int y1, int x2, int y2, int z);
 
 
 // get next line
 char	*get_next_line(int fd);
 char	*ft_strjoinn(char *s1, char *s2);
-
-
 
 #endif

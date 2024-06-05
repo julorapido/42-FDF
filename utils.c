@@ -6,7 +6,7 @@
 /*   By: jsaintho <jsaintho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 15:37:15 by jsaintho          #+#    #+#             */
-/*   Updated: 2024/05/29 12:50:35 by jsaintho         ###   ########.fr       */
+/*   Updated: 2024/06/05 17:44:25 by jsaintho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 // =================================
 void	clean_exit(t_mlx *f)
 {
-	if(f->img)
+	if (f->img)
 	{
 		mlx_destroy_image(f->mlx, f->img);
 	}	
@@ -39,17 +39,26 @@ int	k_hook(int k_code, t_mlx *f)
 		clean_exit(f);
 	else
 	{
+		if (k_code == K_LEFT && X_A > -WIDTH / 3)
+			X_A -= 5;
+		if (k_code == K_RIGHT && X_A < WIDTH / 3)
+			X_A += 5;
+		if (k_code == K_UP && Y_A > -HEIGHT / 3)
+			Y_A -= 5;
+		if (k_code == K_DOWN && Y_A < HEIGHT / 3)
+			Y_A += 5;
 		render(f);
 	}
-	return 0;
+	return (0);
 }
 // ===============================
 // 		   MAP CALCULATOR
 // ===============================
+
 int	map_size(t_mlx *f, char *map_line)
 {
 	int	i;
-	int c;
+	int	c;
 	int	l;
 
 	i = 0;
@@ -57,18 +66,16 @@ int	map_size(t_mlx *f, char *map_line)
 	while (map_line[i] != '\0')
 	{
 		c = 1;
-		while(ft_isdigit(map_line[i + (c - 1)]))
+		while (ft_isdigit(map_line[i + (c - 1)]))
 			c++;
 		if (c > 1)
 			l++;
-		i+= c;
+		i += c;
 	}
 	f->t_f->width = l;
-	f->t_f->x_tile = (int) ((int)F_WIDTH / l);
+	f->t_f->x_tile = ((int) F_WIDTH / l);
 	return (l);
 }
-
-
 
 void	set_wireframe_points(t_mlx *f, char *filename)
 {
@@ -78,8 +85,8 @@ void	set_wireframe_points(t_mlx *f, char *filename)
 	int		c;
 
 	fd = open(ft_strjoin("maps/", filename), O_RDONLY);
-	f->t_f->points = (int *) malloc((f->t_f->width * f->t_f->height) * sizeof(int));
-	f->file_content = (char *) malloc((f->line_length * f->t_f->height) * sizeof(char));
+	f->t_f->points = (int *) malloc((f->t_f->width * f->t_f->height) * 4);
+	f->file_content = (char *) malloc((f->line_length * f->t_f->height));
 	if (fd == -1 || !filename || !f->t_f->points || !f->file_content)
 		return ;
 	k = 0;
@@ -88,15 +95,15 @@ void	set_wireframe_points(t_mlx *f, char *filename)
 	f->file_content[k] = '\0';
 	k = 0;
 	l = 0;
-	while(f->file_content[k] != '\0')
+	while (f->file_content[k] != '\0')
 	{
 		c = 1;
-		while(ft_isdigit(f->file_content[k + (c - 1)]))
+		while (ft_isdigit(f->file_content[k + (c - 1)]))
 			c++;
-		f->t_f->points[l] = ft_atoi(ft_substr(f->file_content, k, c-1)); // slice from k to c - 1
+		f->t_f->points[l] = ft_atoi(ft_substr(f->file_content, k, c - 1));
 		if (c > 1)
 			l++;
-		k += c;	
+		k += c;
 	}
 	close(fd);
 }

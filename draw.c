@@ -6,29 +6,37 @@
 /*   By: jsaintho <jsaintho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 15:16:12 by jsaintho          #+#    #+#             */
-/*   Updated: 2024/06/05 17:43:41 by jsaintho         ###   ########.fr       */
+/*   Updated: 2024/06/11 15:41:08 by jsaintho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	bresline(t_mlx *f, int x0, int y0, int x1, int y1, int z)
+void	bresline(t_mlx *f, int x0, int y0, int x1, int y1)
 {
 	int	err;
 	int	e2;
-	int	d;
-	int	y_step;
+	int	from_color;
+	int	step_color;
 
 	f->t_f->dx = abs(x1 - x0);
 	f->t_f->sx = SNS(x0, x1);
-	f->t_f->dy = -(abs(y1 - y0));
+	f->t_f->dy = -abs(y1 - y0);
 	f->t_f->sy = SNS(y0, y1);
 	err = f->t_f->dx + f->t_f->dy;
-	y_step = abs(y1 - y0);
-	d = f->t_f->top_color;
+	from_color = f->t_f->base_color + (
+			(f->t_f->actual_p_z / f->t_f->slope_len) * (f->t_f->top_color - f->t_f->base_color)
+	);
+	int to_color = f->t_f->base_color + (
+			(f->t_f->actual_p_z_next / f->t_f->slope_len) * (f->t_f->top_color - f->t_f->base_color)
+	);
+	step_color = (to_color - from_color) / abs(abs(y0) - abs(y1));
+	if(to_color == from_color)
+		step_color = 0;
+	printf("Line %d => %d [colo_step %d]  (%d:%d)==(%d:%d) \n", from_color, to_color, step_color, x0, y0, x1, y1);
 	while (1)
 	{
-		set_pixel_color(f, x0, y0, norm_fix_t(f, z, d));
+		set_pixel_color(f, x0, y0, from_color);
 		if (x0 == x1 && y0 == y1)
 			break ;
     	e2 = 2 * err;
@@ -41,7 +49,7 @@ void	bresline(t_mlx *f, int x0, int y0, int x1, int y1, int z)
 		{ 
 			err += f->t_f->dx;
 			y0 += f->t_f->sy;
-			d -= f->t_f->top_color / y_step;
+			from_color += step_color;
 		}
 	}
 }
@@ -66,16 +74,16 @@ void	init_iso(t_mlx *f)
 	t_point	a;
 
 	y = 0;
-	y_p = (HEIGHT - F_HEIGHT) / 2;
+	y_p = ((HEIGHT - F_HEIGHT) / 2) + f->t_f->y_rot_anchor;
 	f->t_f->r_p = (t_point *) malloc(sizeof(t_point) * (f->t_f->width * f->t_f->height));
 	while (y < f->t_f->height)
 	{
 		x = 0;
-		x_p = (WIDTH - F_WIDTH) / 2;
+		x_p = ((WIDTH - F_WIDTH) / 2) + f->t_f->x_rot_anchor;
 		while (x < f->t_f->width)
 		{
-			a = ft_rotate_z(x_p, y_p, degToRad(45));
-			a.y = (ft_rotate_x(a.y, -7 * (f->t_f->points[(y * f->t_f->width) + x]), (atan(sqrt(2))))).y;
+			a = ft_rotate_z(x_p, y_p, degToRad(f->t_f->f_y_rot));
+			a.y = ft_rotate_x(a.y, (-5 * f->t_f->points[(y * f->t_f->width) + x]), atan(sqrt(f->t_f->f_x_rot))).y;
 			f->t_f->r_p[(y * f->t_f->width) + x] = a;
 			x++;
 			x_p += f->t_f->x_tile;
@@ -103,10 +111,12 @@ void	render_fdf(t_mlx *f)
 			x2 = f->t_f->r_p[(y * f->t_f->width) + x + 1];
 			y2 = f->t_f->r_p[((y + 1) * f->t_f->width) + x];
 			if (y < f->t_f->height - 1)
-				bresline(f, x1.x + W3 + X_A, x1.y + Y_A, y2.x + W3 + X_A, y2.y + Y_A, 
-					norm_fix(f, (y * f->t_f->width) + x, ((y + 1) * f->t_f->width) + x));
-			bresline(f, x1.x + W3 + X_A, x1.y + Y_A, x2.x + W3 + X_A, x2.y + Y_A, 
-					norm_fix(f, (y * f->t_f->width) + x, (y * f->t_f->width) + x + 1));
+			{
+				norm_fix(f, (y * f->t_f->width) + x, ((y + 1) * f->t_f->width) + x);
+				bresline(f, x1.x + W3 + X_A, x1.y + Y_A, y2.x + W3 + X_A, y2.y + Y_A);
+			}
+			norm_fix(f, (y * f->t_f->width) + x, (y * f->t_f->width) + x + 1);
+			bresline(f, x1.x + W3 + X_A, x1.y + Y_A, x2.x + W3 + X_A, x2.y + Y_A);
 		}
 	}
 }

@@ -6,37 +6,42 @@
 /*   By: jsaintho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 11:42:03 by jsaintho          #+#    #+#             */
-/*   Updated: 2024/06/05 14:53:37 by jsaintho         ###   ########.fr       */
+/*   Updated: 2024/06/11 15:11:22 by jsaintho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-int	norm_fix(t_mlx *f, int a, int b)
+void	norm_fix(t_mlx *f, int a, int b)
 {
-	if (f->t_f->points[a] - f->t_f->points[b] == 0)
-	{
-		if (f->t_f->points[a] != 0)
-			return (-1);
-		else
-			return (0);
-	}else
-		return (2);
+	f->t_f->actual_p_z = f->t_f->points[a];
+	f->t_f->actual_p_z_next = f->t_f->points[b];
+	f->t_f->actual_p_diff = f->t_f->points[b] - f->t_f->points[a];
+	/*if(f->t_f->actual_p_diff == 0)
+		f->t_f->actual_p_step = 0;
+	else
+		f->t_f->actual_p_step = f->t_f->slope_len / f->t_f->actual_p_diff;*/
 }
 
-int	norm_fix_t(t_mlx *f, int a, int b)
+void	set_fade_settings(t_mlx *f)
 {
-	if (a == 0)
+	int	i;
+	int	a;
+	int	b;
+
+	i = 0;
+	a = 0;
+	b = 100000;
+	while (i < f->t_f->height * f->t_f->width)
 	{
-		return (f->t_f->base_color);
+		if (f->t_f->points[i] > a)
+			a = f->t_f->points[i];
+		if (f->t_f->points[i] < b)
+			b = f->t_f->points[i];
+		i++;
 	}
-	else
-	{
-		if(a == -1)
-			return (f->t_f->top_color);
-		else
-			return (/*f->t_f->base_color +*/ b);
-	}
+	f->t_f->slope_len = a - b;
+	printf("%d to %d  SLOPE LEN %d \n", a, b, a - b);
 }
 
 t_point	ft_rotate_x(int y, int z, double x_angle)

@@ -6,7 +6,7 @@
 /*   By: jsaintho <jsaintho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 15:37:15 by jsaintho          #+#    #+#             */
-/*   Updated: 2024/06/05 17:44:25 by jsaintho         ###   ########.fr       */
+/*   Updated: 2024/06/11 13:13:49 by jsaintho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,32 @@ int	k_hook(int k_code, t_mlx *f)
 	}
 	return (0);
 }
+
+// =================================
+//				MOUSE
+// =================================
+int		hook_mousedown(int button, int x, int y, t_mlx *f)
+{
+	if (button  == MOUSE_WHEEL_UP)
+	{
+		f->t_f->f_y_rot = fToDeg(f->t_f->f_y_rot + 1);
+		f->t_f->y_rot_anchor += -20;
+		f->t_f->x_rot_anchor++;
+	}
+	if (button == MOUSE_WHEEL_DOWN)
+	{
+		if (f->t_f->f_x_rot < 30)
+			f->t_f->f_x_rot = fToDeg(f->t_f->f_x_rot + 0.2);
+	}
+	printf("[Y=%f  X=%f]    ANCHORS[x=%d  y=%d] \n", f->t_f->f_y_rot, f->t_f->f_x_rot,
+			f->t_f->x_rot_anchor, f->t_f->y_rot_anchor);
+	render(f);
+	return (0);
+}
+
 // ===============================
 // 		   MAP CALCULATOR
 // ===============================
-
 int	map_size(t_mlx *f, char *map_line)
 {
 	int	i;
@@ -66,7 +88,7 @@ int	map_size(t_mlx *f, char *map_line)
 	while (map_line[i] != '\0')
 	{
 		c = 1;
-		while (ft_isdigit(map_line[i + (c - 1)]))
+		while (ft_isdigit(map_line[i + (c - 1)]) || map_line[i + (c - 1)] == '-')
 			c++;
 		if (c > 1)
 			l++;
@@ -77,6 +99,9 @@ int	map_size(t_mlx *f, char *map_line)
 	return (l);
 }
 
+// =================================
+// 		POINTS INITIALIZATION
+// =================================
 void	set_wireframe_points(t_mlx *f, char *filename)
 {
 	int		fd;
@@ -98,7 +123,7 @@ void	set_wireframe_points(t_mlx *f, char *filename)
 	while (f->file_content[k] != '\0')
 	{
 		c = 1;
-		while (ft_isdigit(f->file_content[k + (c - 1)]))
+		while (ft_isdigit(f->file_content[k + (c - 1)]) || f->file_content[k + (c - 1)] == '-')
 			c++;
 		f->t_f->points[l] = ft_atoi(ft_substr(f->file_content, k, c - 1));
 		if (c > 1)

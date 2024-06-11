@@ -6,7 +6,7 @@
 /*   By: jsaintho <jsaintho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 11:39:15 by jsaintho          #+#    #+#             */
-/*   Updated: 2024/06/05 17:31:48 by jsaintho         ###   ########.fr       */
+/*   Updated: 2024/06/11 14:57:19 by jsaintho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,14 @@ void	init(t_mlx *f)
 	if (!(f->img))
 		clean_exit(f);
 	f->t_f->top_color = 0x0000FFFF;
-	f->t_f->base_color = 0x000000AA;
+	f->t_f->base_color = 0x000000FF;
 	f->buf = mlx_get_data_addr(f->img, &f->bits_per_pixel,
 			&f->line_length, &f->endian);
+	f->t_f->f_y_rot = 45;
+	f->t_f->f_x_rot = (2);
+	f->t_f->y_rot_anchor = 0;
+	f->t_f->x_rot_anchor = 0;
+	set_fade_settings(f);
 }
 //  =====================================================
 //   					  READ FILE 
@@ -104,6 +109,7 @@ int	render(t_mlx *f)
 		while (x++ < WIDTH)
 			set_pixel_color(f, x, y, 0);
 	}
+	init_iso(f);
 	render_fdf(f);
 	mlx_put_image_to_window(f->mlx, f->win, f->img, 0, 0);
 	return (1);

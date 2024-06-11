@@ -6,7 +6,7 @@
 /*   By: jsaintho <jsaintho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 15:03:43 by jsaintho          #+#    #+#             */
-/*   Updated: 2024/06/05 17:00:35 by jsaintho         ###   ########.fr       */
+/*   Updated: 2024/06/10 12:51:25 by jsaintho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	main(int argc, char **argv)
 	init_iso(f);
 	render(f);
 	mlx_hook(f->win, 2, 1L << 0, k_hook, f);
-	//mlx_hook(f->win, 4, 1L << 2, hook_mousedown, f);
+	mlx_hook(f->win, 4, 1L << 2, hook_mousedown, f);
 	mlx_put_image_to_window(f->mlx, f->win, f->img, 0, 0);
 	mlx_loop(f->mlx);
 }

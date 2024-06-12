@@ -6,7 +6,7 @@
 /*   By: jsaintho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 11:42:03 by jsaintho          #+#    #+#             */
-/*   Updated: 2024/06/11 15:11:22 by jsaintho         ###   ########.fr       */
+/*   Updated: 2024/06/12 16:38:39 by jsaintho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,15 @@
 
 void	norm_fix(t_mlx *f, int a, int b)
 {
-	f->t_f->actual_p_z = f->t_f->points[a];
-	f->t_f->actual_p_z_next = f->t_f->points[b];
-	f->t_f->actual_p_diff = f->t_f->points[b] - f->t_f->points[a];
-	/*if(f->t_f->actual_p_diff == 0)
-		f->t_f->actual_p_step = 0;
-	else
-		f->t_f->actual_p_step = f->t_f->slope_len / f->t_f->actual_p_diff;*/
+	if(f->t_f->has_neg >= 0)
+	{
+		f->t_f->actual_p_z = f->t_f->points[a];
+		f->t_f->actual_p_z_next = f->t_f->points[b];
+	}else
+	{
+		f->t_f->actual_p_z = (f->t_f->points[a] - f->t_f->has_neg);
+		f->t_f->actual_p_z_next = (f->t_f->points[b] - f->t_f->has_neg);
+	}
 }
 
 void	set_fade_settings(t_mlx *f)
@@ -41,7 +43,9 @@ void	set_fade_settings(t_mlx *f)
 		i++;
 	}
 	f->t_f->slope_len = a - b;
-	printf("%d to %d  SLOPE LEN %d \n", a, b, a - b);
+	f->t_f->has_neg = 0;
+	if(b < 0)
+		f->t_f->has_neg = b;
 }
 
 t_point	ft_rotate_x(int y, int z, double x_angle)

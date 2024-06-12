@@ -6,7 +6,7 @@
 /*   By: jsaintho <jsaintho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 15:16:12 by jsaintho          #+#    #+#             */
-/*   Updated: 2024/06/11 15:41:08 by jsaintho         ###   ########.fr       */
+/*   Updated: 2024/06/12 16:54:18 by jsaintho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,16 @@ void	bresline(t_mlx *f, int x0, int y0, int x1, int y1)
 	f->t_f->dy = -abs(y1 - y0);
 	f->t_f->sy = SNS(y0, y1);
 	err = f->t_f->dx + f->t_f->dy;
-	from_color = f->t_f->base_color + (
-			(f->t_f->actual_p_z / f->t_f->slope_len) * (f->t_f->top_color - f->t_f->base_color)
-	);
-	int to_color = f->t_f->base_color + (
-			(f->t_f->actual_p_z_next / f->t_f->slope_len) * (f->t_f->top_color - f->t_f->base_color)
-	);
-	step_color = (to_color - from_color) / abs(abs(y0) - abs(y1));
-	if(to_color == from_color)
+
+	float tC_ = f->t_f->top_color-f->t_f->base_color;
+	from_color = (((float)f->t_f->actual_p_z / (float)f->t_f->slope_len) * tC_) + f->t_f->base_color;
+	int to_color = (((float)f->t_f->actual_p_z_next / (float)f->t_f->slope_len) * tC_) + f->t_f->base_color;
+	if(abs(y0 - y1) != 0)
+		step_color = (to_color - from_color) / (abs(y0 - y1));
+	else
+		step_color = (to_color - from_color) / y0;
+	if (to_color == from_color || to_color < 0)
 		step_color = 0;
-	printf("Line %d => %d [colo_step %d]  (%d:%d)==(%d:%d) \n", from_color, to_color, step_color, x0, y0, x1, y1);
 	while (1)
 	{
 		set_pixel_color(f, x0, y0, from_color);
@@ -49,7 +49,7 @@ void	bresline(t_mlx *f, int x0, int y0, int x1, int y1)
 		{ 
 			err += f->t_f->dx;
 			y0 += f->t_f->sy;
-			from_color += step_color;
+			from_color += (step_color);
 		}
 	}
 }

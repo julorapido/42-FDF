@@ -6,7 +6,7 @@
 /*   By: jsaintho <jsaintho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 11:37:56 by jsaintho          #+#    #+#             */
-/*   Updated: 2024/06/11 15:04:34 by jsaintho         ###   ########.fr       */
+/*   Updated: 2024/06/12 16:27:54 by jsaintho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,11 @@
 #define SNS(a,b) a < b ? (1) : (-1)
 # define X_A f->t_f->x_anchor
 # define Y_A f->t_f->y_anchor
+//# define tC_ f->t_f->top_color-f->t_f->base_color
 # define degToRad(a) (a * M_PI / 180.0)
 # define fToDeg(f) f < 0 ? (360 - f) : f
 # define issou(f) f > 180 ? (-f) : f
+# define l_dif(a, b) (a == 0) ? (b) : (a)
 
 /*
 # define ROTATE_Z_X(x, y, a)({			\
@@ -92,11 +94,11 @@ typedef struct s_wireframe
 	int		y_rot_anchor;
 	double	f_x_rot;
 	double	f_y_rot;
-	int		actual_p_diff;
 	int		actual_p_z;
 	int		actual_p_z_next;
 	int		actual_p_step;
 	int		slope_len;
+	int		has_neg;
 }	t_wireframe;
 
 

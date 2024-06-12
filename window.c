@@ -6,7 +6,7 @@
 /*   By: jsaintho <jsaintho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 11:39:15 by jsaintho          #+#    #+#             */
-/*   Updated: 2024/06/11 14:57:19 by jsaintho         ###   ########.fr       */
+/*   Updated: 2024/06/12 16:47:24 by jsaintho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,6 @@ int	read_fdf(t_mlx *f, char *file_name)
 	int		y;
 	char	*line_;
 
-	if (!file_name)
-		return (0);
 	fd = open(ft_strjoin("maps/", file_name), O_RDONLY);
 	if (fd == -1 || !file_name)
 	{
@@ -83,7 +81,7 @@ int	read_fdf(t_mlx *f, char *file_name)
 	y = 1;
 	while (line_)
 	{
-		printf("%s \n", line_);
+		ft_putstr_fd(line_, 1);
 		line_ = get_next_line(fd);
 		y++;
 	}

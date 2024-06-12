@@ -6,7 +6,7 @@
 /*   By: jsaintho <jsaintho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 15:37:15 by jsaintho          #+#    #+#             */
-/*   Updated: 2024/06/11 13:13:49 by jsaintho         ###   ########.fr       */
+/*   Updated: 2024/06/12 18:15:59 by jsaintho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,11 @@ int		hook_mousedown(int button, int x, int y, t_mlx *f)
 	if (button == MOUSE_WHEEL_DOWN)
 	{
 		if (f->t_f->f_x_rot < 30)
+		{
 			f->t_f->f_x_rot = fToDeg(f->t_f->f_x_rot + 0.2);
+			f->t_f->y_rot_anchor += 15;
+			f->t_f->x_rot_anchor += 15;
+		}
 	}
 	printf("[Y=%f  X=%f]    ANCHORS[x=%d  y=%d] \n", f->t_f->f_y_rot, f->t_f->f_x_rot,
 			f->t_f->x_rot_anchor, f->t_f->y_rot_anchor);
@@ -110,6 +114,8 @@ void	set_wireframe_points(t_mlx *f, char *filename)
 	int		c;
 
 	fd = open(ft_strjoin("maps/", filename), O_RDONLY);
+	printf("MALLOC POINTS %d \n", (f->t_f->width * f->t_f->height));
+	printf("MALLOC CONTENT %d \n", f->line_length * f->t_f->height);
 	f->t_f->points = (int *) malloc((f->t_f->width * f->t_f->height) * 4);
 	f->file_content = (char *) malloc((f->line_length * f->t_f->height));
 	if (fd == -1 || !filename || !f->t_f->points || !f->file_content)
